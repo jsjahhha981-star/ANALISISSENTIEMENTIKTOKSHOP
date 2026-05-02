@@ -79,7 +79,7 @@ def auth_page():
         st.markdown("""
         <div style="
             background: rgba(0,0,0,0.85);
-            padding:25px;
+            padding:50px;
             border-radius:12px;
             box-shadow:0 0 20px rgba(0,0,0,0.5);
             text-align:center;
