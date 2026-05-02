@@ -5,84 +5,109 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (VERSI KEREN)
+# 🔐 LOGIN SYSTEM (SPLIT MODERN UI)
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
 
 def login():
 
-    # ===============================
-    # STYLE LOGIN (BLUE ICE)
-    # ===============================
     st.markdown("""
     <style>
 
     /* BACKGROUND */
     .stApp {
-        background: linear-gradient(135deg, #e0f7fa, #e3f2fd, #ffffff);
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
     }
 
-    /* CARD LOGIN */
-    .login-card {
-        max-width: 400px;
-        margin: auto;
-        margin-top: 80px;
-        padding: 30px;
+    /* CONTAINER */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }
+
+    /* CARD */
+    .login-box {
+        display: flex;
+        width: 700px;
         border-radius: 20px;
-        background: linear-gradient(145deg, #ffffff, #e3f2fd);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        text-align: center;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        background: white;
     }
 
-    /* TITLE */
-    .login-title {
-        font-size: 30px;
+    /* LEFT PANEL */
+    .login-left {
+        width: 40%;
+        background: linear-gradient(180deg, #7b1fa2, #512da8);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         font-weight: bold;
-        color: #1e88e5;
-        margin-bottom: 10px;
     }
 
-    /* SUBTITLE */
-    .login-sub {
-        color: gray;
-        margin-bottom: 25px;
+    .login-left h2 {
+        margin-top: 10px;
+    }
+
+    /* RIGHT PANEL */
+    .login-right {
+        width: 60%;
+        padding: 40px;
+    }
+
+    .login-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
     }
 
     /* BUTTON */
     div.stButton > button {
         width: 100%;
-        border-radius: 10px;
-        background: linear-gradient(to right, #4fc3f7, #1e88e5);
+        border-radius: 8px;
+        background: linear-gradient(to right, #7b1fa2, #512da8);
         color: white;
         font-weight: bold;
         border: none;
-        height: 45px;
-        transition: 0.3s;
+        height: 40px;
     }
 
     div.stButton > button:hover {
-        transform: scale(1.03);
-        background: linear-gradient(to right, #29b6f6, #1565c0);
+        background: linear-gradient(to right, #6a1b9a, #4527a0);
     }
 
     </style>
     """, unsafe_allow_html=True)
 
     # ===============================
-    # CARD LOGIN
+    # LAYOUT
     # ===============================
-    st.markdown('<div class="login-card">', unsafe_allow_html=True)
+    st.markdown('<div class="login-container">', unsafe_allow_html=True)
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
 
+    # LEFT
     st.markdown("""
-    <div class="login-title">🔐 LOGIN</div>
-    <div class="login-sub">Masuk untuk menggunakan aplikasi</div>
+        <div class="login-left">
+            <div style="font-size:50px;">👤</div>
+            <h2>LOGIN</h2>
+        </div>
     """, unsafe_allow_html=True)
 
-    username = st.text_input("👤 Username")
-    password = st.text_input("🔑 Password", type="password")
+    # RIGHT
+    st.markdown('<div class="login-right">', unsafe_allow_html=True)
 
-    if st.button("Masuk"):
+    st.markdown('<div class="login-title">Sign in to your account</div>', unsafe_allow_html=True)
+
+    username = st.text_input("Email / Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("LOGIN"):
         if username == "admin" and password == "1234":
             st.session_state.login = True
             st.success("Login berhasil!")
@@ -90,7 +115,10 @@ def login():
         else:
             st.error("Username atau password salah!")
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)  # right
+    st.markdown('</div>', unsafe_allow_html=True)  # box
+    st.markdown('</div>', unsafe_allow_html=True)  # container
+
 
 # ===============================
 # CEK LOGIN
