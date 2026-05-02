@@ -57,6 +57,7 @@ def auth_page():
         background: white;
         color: black;
         border-radius: 1px;
+        width: 1000%;
     }
 
     .stButton>button {
