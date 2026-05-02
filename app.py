@@ -10,30 +10,27 @@ import os
 USER_FILE = "users.csv"
 
 def load_users():
-    if os.path.exists(USER_FILE):
-        try:
-            df = pd.read_csv(USER_FILE)
-
-            # 🔥 FIX: kalau kosong / rusak → reset
-            if df.empty or "username" not in df.columns:
-                df = pd.DataFrame(columns=["username", "password"])
-                df.to_csv(USER_FILE, index=False)
-
-            return df
-
-        except:
-            df = pd.DataFrame(columns=["username", "password"])
-            df.to_csv(USER_FILE, index=False)
-            return df
-    else:
+    # kalau file belum ada → buat file kosong
+    if not os.path.exists(USER_FILE):
         df = pd.DataFrame(columns=["username", "password"])
         df.to_csv(USER_FILE, index=False)
         return df
 
-def save_users(df):
-    if df.empty:
+    # kalau file ada tapi kosong/error → reset
+    try:
+        df = pd.read_csv(USER_FILE)
+        if "username" not in df.columns:
+            df = pd.DataFrame(columns=["username", "password"])
+        return df
+    except:
         df = pd.DataFrame(columns=["username", "password"])
+        df.to_csv(USER_FILE, index=False)
+        return df
+
+
+def save_users(df):
     df.to_csv(USER_FILE, index=False)
+
 
 # ===============================
 # SESSION LOGIN
@@ -43,6 +40,7 @@ if "login" not in st.session_state:
 
 if "auth_mode" not in st.session_state:
     st.session_state.auth_mode = "login"
+
 
 # ===============================
 # 🔐 LOGIN + REGISTER SYSTEM
@@ -56,26 +54,25 @@ def auth_page():
     }
 
     .auth-card {
-        background: rgba(0,0,0,0.8);
+        background: rgba(0,0,0,0.75);
         padding: 30px;
         border-radius: 15px;
-        width: 350px;
+        width: 360px;
         margin: auto;
         margin-top: 80px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        box-shadow: 0 0 25px rgba(0,0,0,0.6);
     }
 
     .title {
         text-align:center;
         color:white;
-        font-size:20px;
+        font-size:22px;
         font-weight:bold;
         margin-bottom:15px;
     }
 
     label {
         color:white !important;
-        font-size:13px !important;
     }
 
     .stTextInput input {
@@ -95,10 +92,11 @@ def auth_page():
         color: #81d4fa !important;
         border: none;
         text-decoration: underline;
-        font-size: 12px;
     }
     </style>
     """, unsafe_allow_html=True)
+
+    users = load_users()
 
     st.markdown('<div class="auth-card">', unsafe_allow_html=True)
 
@@ -109,19 +107,18 @@ def auth_page():
 
         st.markdown('<div class="title">🔐 Login</div>', unsafe_allow_html=True)
 
-        username = st.text_input("Username").strip().lower()
-        password = st.text_input("Password", type="password").strip()
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
         if st.button("Login"):
-            users = load_users()  # 🔥 reload terbaru
 
-            if "username" in users.columns:
-                user = users[
-                    (users["username"] == username) &
-                    (users["password"] == password)
-                ]
-            else:
-                user = pd.DataFrame()
+            # reload biar data terbaru kebaca
+            users = load_users()
+
+            user = users[
+                (users["username"] == username) &
+                (users["password"] == password)
+            ]
 
             if not user.empty:
                 st.session_state.login = True
@@ -130,11 +127,9 @@ def auth_page():
             else:
                 st.error("Username atau password salah!")
 
-        st.markdown('<div class="switch-btn">', unsafe_allow_html=True)
         if st.button("Belum punya akun? Register"):
             st.session_state.auth_mode = "register"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     # ===============================
     # REGISTER
@@ -143,32 +138,40 @@ def auth_page():
 
         st.markdown('<div class="title">📝 Register</div>', unsafe_allow_html=True)
 
-        new_user = st.text_input("Username Baru").strip().lower()
-        new_pass = st.text_input("Password Baru", type="password").strip()
+        new_user = st.text_input("Username Baru")
+        new_pass = st.text_input("Password Baru", type="password")
 
         if st.button("Daftar"):
-            users = load_users()  # 🔥 reload ulang
+
+            users = load_users()
 
             if new_user == "" or new_pass == "":
                 st.warning("Isi semua field!")
-            elif "username" in users.columns and new_user in users["username"].values:
+
+            elif new_user in users["username"].astype(str).values:
                 st.error("Username sudah digunakan!")
+
             else:
-                new_data = pd.DataFrame([[new_user, new_pass]], columns=["username", "password"])
+                new_data = pd.DataFrame(
+                    [[new_user, new_pass]],
+                    columns=["username", "password"]
+                )
+
                 users = pd.concat([users, new_data], ignore_index=True)
+
+                # 🔥 WAJIB: simpan ke file
                 save_users(users)
 
                 st.success("Registrasi berhasil! Silakan login.")
                 st.session_state.auth_mode = "login"
                 st.rerun()
 
-        st.markdown('<div class="switch-btn">', unsafe_allow_html=True)
         if st.button("Sudah punya akun? Login"):
             st.session_state.auth_mode = "login"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 # ===============================
 # CEK LOGIN
