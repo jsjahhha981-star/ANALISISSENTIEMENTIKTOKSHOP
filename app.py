@@ -326,8 +326,8 @@ with st.sidebar:
     )
     selected = option_menu(
         menu_title=None,
-        options=["Beranda", "Input Text", "Upload Data", "Riwayat"],
-        icons=["house", "chat-dots", "upload", "archive"],
+        options=["Beranda", "Input Text", "Upload Data", "Riwayat", "Logout"],
+        icons=["house", "chat-dots", "upload", "archive", "box-arrow-right"],
         menu_icon="cast",
         default_index=0, 
     )
@@ -861,6 +861,16 @@ elif selected == "Riwayat":
                 st.session_state.history = []
                 save_history(pd.DataFrame(columns=["Teks","Naive Bayes","SVM"]))
                 st.success("✅ Riwayat berhasil dihapus!")
+
+# ===============================
+# LOGOUT SYSTEM
+# ===============================
+if selected == "Logout":
+    st.session_state.login = False
+    st.session_state.auth_mode = "login"
+
+    st.success("Berhasil logout 👋")
+    st.rerun()
 
             # ===========================
 # FOOTER (UPGRADE)
