@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (FIX CLEAN & COMPACT)
+# 🔐 LOGIN SYSTEM (FIX FINAL UI)
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
@@ -20,7 +20,7 @@ def login():
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
-    /* CENTER WRAPPER */
+    /* CENTER */
     .login-wrapper {
         display: flex;
         justify-content: center;
@@ -28,35 +28,39 @@ def login():
         height: 90vh;
     }
 
-    /* CARD */
+    /* CARD (FIX KELIHATAN) */
     .login-card {
-        width: 320px;
-        padding: 25px;
+        width: 350px;
+        padding: 30px;
         border-radius: 15px;
-        background: rgba(0,0,0,0.65);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.2);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.75);
+        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         text-align: center;
-        color: white;
     }
 
     /* TITLE */
     .login-title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: bold;
-        margin-top: 10px;
-        margin-bottom: 15px;
         color: white;
+        margin-bottom: 20px;
+    }
+
+    /* LABEL USERNAME & PASSWORD (INI YANG PENTING) */
+    label {
+        color: white !important;
+        font-size: 14px !important;
+        font-weight: 500;
     }
 
     /* INPUT */
-    .stTextInput > div > div > input {
-        background-color: rgba(255,255,255,0.1);
-        color: white;
+    .stTextInput input {
+        background-color: rgba(255,255,255,0.15) !important;
+        color: white !important;
         border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.2);
-        height: 35px;
+        border: 1px solid rgba(255,255,255,0.3);
+        height: 38px;
     }
 
     /* BUTTON */
@@ -67,15 +71,18 @@ def login():
         color: white;
         font-weight: bold;
         border: none;
-        height: 35px;
-        font-size: 14px;
+        height: 40px;
+    }
+
+    div.stButton > button:hover {
+        background: linear-gradient(to right, #ff4b2b, #ff416c);
     }
 
     /* TEXT */
     .small-text {
-        font-size: 11px;
+        font-size: 12px;
         color: #ccc;
-        margin-top: 8px;
+        margin-top: 10px;
     }
 
     </style>
@@ -88,7 +95,7 @@ def login():
     st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="font-size:40px;">👤</div>
+    <div style="font-size:45px;">👤</div>
     <div class="login-title">Login Here</div>
     """, unsafe_allow_html=True)
 
