@@ -93,6 +93,21 @@ if "history" not in st.session_state:
 # SIDEBAR MENU
 # ===============================
 with st.sidebar:
+    st.markdown(
+        """
+        <div style="
+            background-color:#2b2b2b;
+            padding:10px;
+            border-radius:10px;
+            margin-bottom:10px;
+            color:white;
+            font-weight:bold;
+        ">
+            Dashboard
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     selected = option_menu(
         menu_title=None,
         options=["Beranda", "Input Text", "Upload Data", "Riwayat"],
