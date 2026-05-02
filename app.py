@@ -25,10 +25,8 @@ def load_users():
         df.to_csv(USER_FILE, index=False)
         return df
 
-
 def save_users(df):
     df.to_csv(USER_FILE, index=False)
-
 
 # ===============================
 # SESSION LOGIN
@@ -38,7 +36,6 @@ if "login" not in st.session_state:
 
 if "auth_mode" not in st.session_state:
     st.session_state.auth_mode = "login"
-
 
 # ===============================
 # 🔐 LOGIN + REGISTER SYSTEM
@@ -51,13 +48,18 @@ def auth_page():
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
+    .auth-wrapper {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
+
     .auth-card {
         background: rgba(0,0,0,0.75);
         padding: 30px;
         border-radius: 15px;
         width: 360px;
-        margin: auto;
-        margin-top: 80px;
         box-shadow: 0 0 25px rgba(0,0,0,0.6);
     }
 
@@ -74,35 +76,29 @@ def auth_page():
     }
 
     .stTextInput input {
+        background:#ffffff;
+        color:black;
         border-radius:8px;
-        background:#f1f1f1;
     }
 
     .stButton>button {
-        background:#ff4b4b;
+        background:#4facfe;
         color:white;
         border-radius:8px;
         width:100%;
-    }
-
-    .switch-btn button {
-        background: transparent !important;
-        color: #81d4fa !important;
-        border: none;
-        text-decoration: underline;
+        font-weight:bold;
     }
     </style>
     """, unsafe_allow_html=True)
 
     users = load_users()
 
+    st.markdown('<div class="auth-wrapper"><div class="auth-card">', unsafe_allow_html=True)
 
-    # ===============================
     # LOGIN
-    # ===============================
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">🔐 LOGIN</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -117,53 +113,19 @@ def auth_page():
             ]
 
             if not user.empty:
-
                 import time
 
-                # ===============================
-                # 🎉 ANIMASI LOGIN BERHASIL
-                # ===============================
-                success_box = st.empty()
-
-                success_box.markdown("""
-                <div style='
-                    text-align:center;
-                    padding:25px;
-                    border-radius:15px;
-                    background: linear-gradient(135deg, #4facfe, #00f2fe);
-                    color:white;
-                    font-size:18px;
-                    font-weight:bold;
-                    box-shadow: 0 0 25px rgba(0,0,0,0.4);
-                    animation: fadeIn 0.8s ease-in-out;
-                '>
-                    Login Berhasil<br>
-                    <span style='font-size:14px;'>Sedang masuk ke dashboard...</span>
-                </div>
-
-                <style>
-                @keyframes fadeIn {
-                    from {opacity:0; transform:translateY(20px);}
-                    to {opacity:1; transform:translateY(0);}
-                }
-                </style>
-                """, unsafe_allow_html=True)
-
-                # progress bar
+                st.success("Login berhasil!")
                 progress = st.progress(0)
+
                 for i in range(100):
                     time.sleep(0.01)
-                    progress.progress(i + 1)
+                    progress.progress(i+1)
 
-                # efek balon 🎈
                 st.balloons()
 
-                # set login
                 st.session_state.login = True
-
-                time.sleep(0.5)
                 st.rerun()
-
             else:
                 st.error("Username atau password salah!")
 
@@ -171,12 +133,9 @@ def auth_page():
             st.session_state.auth_mode = "register"
             st.rerun()
 
-    # ===============================
     # REGISTER
-    # ===============================
     else:
-
-        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">📝 REGISTER</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
@@ -195,16 +154,11 @@ def auth_page():
                 st.error("Username sudah digunakan!")
 
             else:
-                new_data = pd.DataFrame(
-                    [[new_user, new_pass]],
-                    columns=["username", "password"]
-                )
-
+                new_data = pd.DataFrame([[new_user, new_pass]], columns=["username", "password"])
                 users = pd.concat([users, new_data], ignore_index=True)
-
                 save_users(users)
 
-                st.success("Registrasi berhasil! Silakan login.")
+                st.success("Registrasi berhasil!")
                 st.session_state.auth_mode = "login"
                 st.rerun()
 
@@ -212,8 +166,7 @@ def auth_page():
             st.session_state.auth_mode = "login"
             st.rerun()
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
 # ===============================
 # CEK LOGIN
