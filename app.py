@@ -48,6 +48,7 @@ def auth_page():
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
+    /* CENTER WRAPPER */
     .auth-wrapper {
         display:flex;
         justify-content:center;
@@ -55,52 +56,61 @@ def auth_page():
         height:100vh;
     }
 
+    /* 🔥 CARD DIPERKECIL */
     .auth-card {
         background: rgba(0,0,0,0.85);
-        padding: 30px;
-        border-radius: 15px;
-        width: 360px;
-        box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        padding: 18px;               /* sebelumnya 30px */
+        border-radius: 12px;
+        width: 280px;                /* sebelumnya 360px */
+        box-shadow: 0 0 20px rgba(0,0,0,0.6);
     }
 
+    /* 🔥 TITLE DIPERKECIL */
     .title {
         text-align:center;
         color:white;
-        font-size:22px;
+        font-size:16px;              /* sebelumnya 22px */
         font-weight:bold;
-        margin-bottom:15px;
+        margin-bottom:10px;
     }
 
+    /* LABEL */
     label {
         color:white !important;
+        font-size:12px !important;   /* kecil */
     }
 
+    /* INPUT */
     .stTextInput input {
         background:white;
         color:black;
-        border-radius:8px;
+        border-radius:6px;
+        padding:6px;
+        font-size:12px;              /* kecil */
     }
 
+    /* BUTTON */
     .stButton>button {
         background:#4facfe;
         color:white;
-        border-radius:8px;
+        border-radius:6px;
         width:100%;
         font-weight:bold;
+        padding:6px;
+        font-size:12px;              /* kecil */
     }
     </style>
     """, unsafe_allow_html=True)
 
     users = load_users()
 
-    # 🔥 WRAPPER (FIX UI)
-    st.markdown('<div class="auth-wrapper">', unsafe_allow_html=True)
-    
+    # 🔥 WRAPPER + CARD FIX
+    st.markdown('<div class="auth-wrapper"><div class="auth-card">', unsafe_allow_html=True)
 
-    # LOGIN
+    # ================= LOGIN =================
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">🔐 LOGIN</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -131,14 +141,14 @@ def auth_page():
             else:
                 st.error("Username atau password salah!")
 
-        if st.button("Belum punya akun? Register"):
+        if st.button("Register"):
             st.session_state.auth_mode = "register"
             st.rerun()
 
-    # REGISTER
+    # ================= REGISTER =================
     else:
 
-        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">📝 REGISTER</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
@@ -165,7 +175,7 @@ def auth_page():
                 st.session_state.auth_mode = "login"
                 st.rerun()
 
-        if st.button("Sudah punya akun? Login"):
+        if st.button("Login"):
             st.session_state.auth_mode = "login"
             st.rerun()
 
