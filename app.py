@@ -42,142 +42,127 @@ if "auth_mode" not in st.session_state:
 # ===============================
 def auth_page():
 
+    # background
     st.markdown("""
     <style>
     .stApp {
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
-    .auth-wrapper {
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-    }
-
-    .auth-card {
-        background: rgba(0,0,0,0.85);
-        padding: 25px;
-        border-radius: 12px;
-        width: 300px; /* 🔥 DIPERKECIL */
-        box-shadow: 0 0 25px rgba(0,0,0,0.7);
-    }
-
-    .title {
-        text-align:center;
-        color:white;
-        font-size:18px; /* 🔥 DIPERKECIL */
-        font-weight:bold;
-        margin-bottom:10px;
-    }
-
     label {
-        color:white !important;
-        font-size:13px !important;
+        color: white !important;
     }
 
     .stTextInput input {
-        background:white;
-        color:black;
-        border-radius:6px;
-        height:35px;
+        background: white;
+        color: black;
+        border-radius: 8px;
     }
 
     .stButton>button {
-        background:#4facfe;
-        color:white;
-        border-radius:6px;
-        width:100%;
-        font-size:13px;
-        font-weight:bold;
-        height:35px;
+        background: #4facfe;
+        color: white;
+        border-radius: 8px;
+        width: 100%;
+        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
 
     users = load_users()
 
-    # 🔥 WRAPPER + CARD (INI YANG PENTING)
-    st.markdown('<div class="auth-wrapper"><div class="auth-card">', unsafe_allow_html=True)
+    # 🔥 CENTER FORM (INI KUNCINYA)
+    col1, col2, col3 = st.columns([1.5, 1, 1.5])
 
-    # ===============================
-    # LOGIN
-    # ===============================
-    if st.session_state.auth_mode == "login":
+    with col2:
 
-        st.markdown('<div class="title">🔐 LOGIN</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="
+            background: rgba(0,0,0,0.85);
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 0 20px rgba(0,0,0,0.5);
+            text-align:center;
+        ">
+        """, unsafe_allow_html=True)
 
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
+        # ===============================
+        # LOGIN
+        # ===============================
+        if st.session_state.auth_mode == "login":
 
-        if st.button("Login"):
+            st.markdown("<h4 style='color:white'>🔐 LOGIN</h4>", unsafe_allow_html=True)
 
-            users = load_users()
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
 
-            user = users[
-                (users["username"].astype(str).str.strip() == str(username).strip()) &
-                (users["password"].astype(str).str.strip() == str(password).strip())
-            ]
+            if st.button("Login"):
 
-            if not user.empty:
-                import time
+                users = load_users()
 
-                st.success("Login berhasil!")
-                progress = st.progress(0)
+                user = users[
+                    (users["username"].astype(str).str.strip() == str(username).strip()) &
+                    (users["password"].astype(str).str.strip() == str(password).strip())
+                ]
 
-                for i in range(100):
-                    time.sleep(0.01)
-                    progress.progress(i+1)
+                if not user.empty:
+                    import time
 
-                st.balloons()
+                    st.success("Login berhasil!")
+                    progress = st.progress(0)
 
-                st.session_state.login = True
+                    for i in range(100):
+                        time.sleep(0.01)
+                        progress.progress(i+1)
+
+                    st.balloons()
+
+                    st.session_state.login = True
+                    st.rerun()
+                else:
+                    st.error("Username atau password salah!")
+
+            if st.button("Belum punya akun? Register"):
+                st.session_state.auth_mode = "register"
                 st.rerun()
-            else:
-                st.error("Username atau password salah!")
 
-        if st.button("Belum punya akun? Register"):
-            st.session_state.auth_mode = "register"
-            st.rerun()
+        # ===============================
+        # REGISTER
+        # ===============================
+        else:
 
-    # ===============================
-    # REGISTER
-    # ===============================
-    else:
+            st.markdown("<h4 style='color:white'>📝 REGISTER</h4>", unsafe_allow_html=True)
 
-        st.markdown('<div class="title">📝 REGISTER</div>', unsafe_allow_html=True)
+            new_user = st.text_input("Username Baru")
+            new_pass = st.text_input("Password Baru", type="password")
 
-        new_user = st.text_input("Username Baru")
-        new_pass = st.text_input("Password Baru", type="password")
+            if st.button("Daftar"):
 
-        if st.button("Daftar"):
+                users = load_users()
 
-            users = load_users()
+                new_user = str(new_user).strip()
+                new_pass = str(new_pass).strip()
 
-            new_user = str(new_user).strip()
-            new_pass = str(new_pass).strip()
+                if new_user == "" or new_pass == "":
+                    st.warning("Isi semua field!")
 
-            if new_user == "" or new_pass == "":
-                st.warning("Isi semua field!")
+                elif new_user in users["username"].astype(str).str.strip().values:
+                    st.error("Username sudah digunakan!")
 
-            elif new_user in users["username"].astype(str).str.strip().values:
-                st.error("Username sudah digunakan!")
+                else:
+                    new_data = pd.DataFrame([[new_user, new_pass]], columns=["username", "password"])
+                    users = pd.concat([users, new_data], ignore_index=True)
+                    save_users(users)
 
-            else:
-                new_data = pd.DataFrame([[new_user, new_pass]], columns=["username", "password"])
-                users = pd.concat([users, new_data], ignore_index=True)
-                save_users(users)
+                    st.success("Registrasi berhasil!")
+                    st.session_state.auth_mode = "login"
+                    st.rerun()
 
-                st.success("Registrasi berhasil!")
+            if st.button("Sudah punya akun? Login"):
                 st.session_state.auth_mode = "login"
                 st.rerun()
 
-        if st.button("Sudah punya akun? Login"):
-            st.session_state.auth_mode = "login"
-            st.rerun()
-
-    # 🔥 PENUTUP CARD + WRAPPER
-    st.markdown('</div></div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ===============================
 # ROUTING LOGIN
