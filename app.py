@@ -14,90 +14,59 @@ def login():
 
     st.markdown("""
     <style>
-
     /* BACKGROUND */
     .stApp {
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
-    /* CENTER */
-    .login-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 90vh;
-    }
-
-    /* CARD (FIX KELIHATAN) */
+    /* CARD LOGIN */
     .login-card {
-        width: 350px;
+        background: rgba(0, 0, 0, 0.7);
         padding: 30px;
         border-radius: 15px;
-        background: rgba(0,0,0,0.75);
-        border: 1px solid rgba(255,255,255,0.3);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        text-align: center;
+        width: 350px;
+        margin: auto;
+        margin-top: 100px;
+        box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
     }
 
     /* TITLE */
     .login-title {
-        font-size: 22px;
-        font-weight: bold;
+        text-align: center;
         color: white;
+        font-size: 24px;
+        font-weight: bold;
         margin-bottom: 20px;
     }
 
-    /* LABEL USERNAME & PASSWORD (INI YANG PENTING) */
+    /* LABEL */
     label {
         color: white !important;
         font-size: 14px !important;
-        font-weight: 500;
     }
 
     /* INPUT */
     .stTextInput input {
-        background-color: rgba(255,255,255,0.15) !important;
-        color: white !important;
+        background-color: #f1f1f1;
         border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.3);
-        height: 38px;
     }
 
     /* BUTTON */
-    div.stButton > button {
-        width: 100%;
-        border-radius: 8px;
-        background: linear-gradient(to right, #ff416c, #ff4b2b);
+    .stButton>button {
+        background-color: #ff4b4b;
         color: white;
-        font-weight: bold;
-        border: none;
-        height: 40px;
+        border-radius: 8px;
+        width: 100%;
     }
-
-    div.stButton > button:hover {
-        background: linear-gradient(to right, #ff4b2b, #ff416c);
-    }
-
-    /* TEXT */
-    .small-text {
-        font-size: 12px;
-        color: #ccc;
-        margin-top: 10px;
-    }
-
     </style>
     """, unsafe_allow_html=True)
 
     # ===============================
-    # LAYOUT
+    # CARD MULAI (INI YANG BENER)
     # ===============================
-    st.markdown('<div class="login-wrapper">', unsafe_allow_html=True)
     st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="font-size:45px;">👤</div>
-    <div class="login-title">Login Here</div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="login-title">🔐 Login Here</div>', unsafe_allow_html=True)
 
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
@@ -109,6 +78,8 @@ def login():
             st.rerun()
         else:
             st.error("Username atau password salah!")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("""
     <div class="small-text">Lost your password?</div>
