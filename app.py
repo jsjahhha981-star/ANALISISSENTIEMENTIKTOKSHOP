@@ -79,9 +79,9 @@ def auth_page():
         st.markdown("""
         <div style="
             background: rgba(0,0,0,0.85);
-            padding:50px;
-            border-radius:12px;
-            box-shadow:0 0 20px rgba(0,0,0,0.5);
+            padding:100px;
+            border-radius:19px;
+            box-shadow:0 0 200px rgba(0,0,0,0.5);
             text-align:center;
         ">
         """, unsafe_allow_html=True)
