@@ -91,7 +91,7 @@ def auth_page():
         # ===============================
         if st.session_state.auth_mode == "login":
 
-            st.markdown("<h4 style='color:white'>🔐 LOGIN</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='color:white'>FORM LOGIN</h4>", unsafe_allow_html=True)
 
             username = st.text_input("Username")
             password = st.text_input("Password", type="password")
@@ -131,7 +131,7 @@ def auth_page():
         # ===============================
         else:
 
-            st.markdown("<h4 style='color:white'>📝 REGISTER</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='color:white'>FORM REGISTER</h4>", unsafe_allow_html=True)
 
             new_user = st.text_input("Username Baru")
             new_pass = st.text_input("Password Baru", type="password")
