@@ -96,11 +96,11 @@ with st.sidebar:
     st.markdown(
         """
         <div style="
-            background-color:white;
+            background-color:#e0e0e0;
             padding:10px;
             border-radius:10px;
             margin-bottom:10px;
-            color:#2b2b2b;
+            color:black;
             font-weight:bold;
         ">
             Dashboard
