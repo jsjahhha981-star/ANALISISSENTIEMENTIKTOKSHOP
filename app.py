@@ -96,14 +96,13 @@ def auth_page():
 
     users = load_users()
 
-    st.markdown('<div class="auth-card">', unsafe_allow_html=True)
 
     # ===============================
     # LOGIN
     # ===============================
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">🔐 Login</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -138,7 +137,7 @@ def auth_page():
                     box-shadow: 0 0 25px rgba(0,0,0,0.4);
                     animation: fadeIn 0.8s ease-in-out;
                 '>
-                    🔐 Login Berhasil<br>
+                    Login Berhasil<br>
                     <span style='font-size:14px;'>Sedang masuk ke dashboard...</span>
                 </div>
 
@@ -177,7 +176,7 @@ def auth_page():
     # ===============================
     else:
 
-        st.markdown('<div class="title">📝 Register</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
