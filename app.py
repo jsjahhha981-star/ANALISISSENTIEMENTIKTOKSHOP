@@ -62,8 +62,8 @@ def auth_page():
     .stButton>button {
         background: #4facfe;
         color: white;
-        border-radius: 8px;
-        width: 100%;
+        border-radius: 20px;
+        width: 1000%;
         font-weight: bold;
     }
     </style>
