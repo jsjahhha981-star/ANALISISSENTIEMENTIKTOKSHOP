@@ -10,16 +10,16 @@ import os
 USER_FILE = "users.csv"
 
 def load_users():
-    # kalau file belum ada → buat file kosong
+    # kalau file belum ada → buat
     if not os.path.exists(USER_FILE):
         df = pd.DataFrame(columns=["username", "password"])
         df.to_csv(USER_FILE, index=False)
         return df
 
-    # kalau file ada tapi kosong/error → reset
+    # kalau file kosong/error → reset
     try:
         df = pd.read_csv(USER_FILE)
-        if "username" not in df.columns:
+        if df.empty or "username" not in df.columns:
             df = pd.DataFrame(columns=["username", "password"])
         return df
     except:
@@ -112,13 +112,16 @@ def auth_page():
 
         if st.button("Login"):
 
-            # reload biar data terbaru kebaca
             users = load_users()
 
+            # 🔥 FIX UTAMA (ANTI GAGAL LOGIN)
             user = users[
-                (users["username"] == username) &
-                (users["password"] == password)
+                (users["username"].astype(str).str.strip() == str(username).strip()) &
+                (users["password"].astype(str).str.strip() == str(password).strip())
             ]
+
+            # DEBUG (optional)
+            # st.write(users)
 
             if not user.empty:
                 st.session_state.login = True
@@ -145,10 +148,14 @@ def auth_page():
 
             users = load_users()
 
+            # bersihkan input
+            new_user = str(new_user).strip()
+            new_pass = str(new_pass).strip()
+
             if new_user == "" or new_pass == "":
                 st.warning("Isi semua field!")
 
-            elif new_user in users["username"].astype(str).values:
+            elif new_user in users["username"].astype(str).str.strip().values:
                 st.error("Username sudah digunakan!")
 
             else:
@@ -159,7 +166,6 @@ def auth_page():
 
                 users = pd.concat([users, new_data], ignore_index=True)
 
-                # 🔥 WAJIB: simpan ke file
                 save_users(users)
 
                 st.success("Registrasi berhasil! Silakan login.")
