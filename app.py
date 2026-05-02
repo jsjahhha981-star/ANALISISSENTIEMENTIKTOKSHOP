@@ -100,7 +100,7 @@ with st.sidebar:
             padding:10px;
             border-radius:10px;
             margin-bottom:10px;
-            color:black;
+            color:grey;
             font-weight:bold;
         ">
             Dashboard
