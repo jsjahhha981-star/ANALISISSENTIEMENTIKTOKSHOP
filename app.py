@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (DARK GALAXY UI)
+# 🔐 LOGIN SYSTEM (FIX CLEAN & COMPACT)
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
@@ -15,36 +15,39 @@ def login():
     st.markdown("""
     <style>
 
-    /* BACKGROUND NIGHT */
+    /* BACKGROUND */
     .stApp {
-        background: radial-gradient(circle at top, #1a1a2e, #0f3460, #000000);
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
-    /* CENTER CONTAINER */
-    .login-container {
+    /* CENTER WRAPPER */
+    .login-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 90vh;
     }
 
-    /* CARD GLASS */
+    /* CARD */
     .login-card {
-        width: 350px;
-        padding: 30px;
+        width: 320px;
+        padding: 25px;
         border-radius: 15px;
-        background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        color: white;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.6);
         text-align: center;
+        color: white;
     }
 
     /* TITLE */
     .login-title {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        color: white;
     }
 
     /* INPUT */
@@ -52,6 +55,8 @@ def login():
         background-color: rgba(255,255,255,0.1);
         color: white;
         border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.2);
+        height: 35px;
     }
 
     /* BUTTON */
@@ -62,20 +67,15 @@ def login():
         color: white;
         font-weight: bold;
         border: none;
-        height: 40px;
-        transition: 0.3s;
-    }
-
-    div.stButton > button:hover {
-        transform: scale(1.03);
-        background: linear-gradient(to right, #ff4b2b, #ff416c);
+        height: 35px;
+        font-size: 14px;
     }
 
     /* TEXT */
     .small-text {
-        font-size: 12px;
+        font-size: 11px;
         color: #ccc;
-        margin-top: 10px;
+        margin-top: 8px;
     }
 
     </style>
@@ -84,12 +84,11 @@ def login():
     # ===============================
     # LAYOUT
     # ===============================
-    st.markdown('<div class="login-container">', unsafe_allow_html=True)
-
+    st.markdown('<div class="login-wrapper">', unsafe_allow_html=True)
     st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="font-size:50px;">👤</div>
+    <div style="font-size:40px;">👤</div>
     <div class="login-title">Login Here</div>
     """, unsafe_allow_html=True)
 
