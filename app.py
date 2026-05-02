@@ -10,13 +10,11 @@ import os
 USER_FILE = "users.csv"
 
 def load_users():
-    # kalau file belum ada → buat
     if not os.path.exists(USER_FILE):
         df = pd.DataFrame(columns=["username", "password"])
         df.to_csv(USER_FILE, index=False)
         return df
 
-    # kalau file kosong/error → reset
     try:
         df = pd.read_csv(USER_FILE)
         if df.empty or "username" not in df.columns:
@@ -98,13 +96,14 @@ def auth_page():
 
     users = load_users()
 
+    st.markdown('<div class="auth-card">', unsafe_allow_html=True)
 
     # ===============================
     # LOGIN
     # ===============================
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">🔐 Login</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -113,19 +112,59 @@ def auth_page():
 
             users = load_users()
 
-            # 🔥 FIX UTAMA (ANTI GAGAL LOGIN)
             user = users[
                 (users["username"].astype(str).str.strip() == str(username).strip()) &
                 (users["password"].astype(str).str.strip() == str(password).strip())
             ]
 
-            # DEBUG (optional)
-            # st.write(users)
+            if not user.empty:
 
-           if not user.empty:
-    st.session_state.login = True
-    st.success("Login berhasil!")
-    st.rerun()
+                import time
+
+                # ===============================
+                # 🎉 ANIMASI LOGIN BERHASIL
+                # ===============================
+                success_box = st.empty()
+
+                success_box.markdown("""
+                <div style='
+                    text-align:center;
+                    padding:25px;
+                    border-radius:15px;
+                    background: linear-gradient(135deg, #4facfe, #00f2fe);
+                    color:white;
+                    font-size:18px;
+                    font-weight:bold;
+                    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+                    animation: fadeIn 0.8s ease-in-out;
+                '>
+                    🔐 Login Berhasil<br>
+                    <span style='font-size:14px;'>Sedang masuk ke dashboard...</span>
+                </div>
+
+                <style>
+                @keyframes fadeIn {
+                    from {opacity:0; transform:translateY(20px);}
+                    to {opacity:1; transform:translateY(0);}
+                }
+                </style>
+                """, unsafe_allow_html=True)
+
+                # progress bar
+                progress = st.progress(0)
+                for i in range(100):
+                    time.sleep(0.01)
+                    progress.progress(i + 1)
+
+                # efek balon 🎈
+                st.balloons()
+
+                # set login
+                st.session_state.login = True
+
+                time.sleep(0.5)
+                st.rerun()
+
             else:
                 st.error("Username atau password salah!")
 
@@ -138,7 +177,7 @@ def auth_page():
     # ===============================
     else:
 
-        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">📝 Register</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
@@ -147,7 +186,6 @@ def auth_page():
 
             users = load_users()
 
-            # bersihkan input
             new_user = str(new_user).strip()
             new_pass = str(new_pass).strip()
 
