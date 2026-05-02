@@ -5,3 +5,5 @@ joblib
 matplotlib
 seaborn
 streamlit-option-menu
+pandas
+openpyxl
