@@ -5,96 +5,150 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (FIX FINAL UI)
+# DATABASE USER (CSV)
+# ===============================
+USER_FILE = "users.csv"
+
+def load_users():
+    if os.path.exists(USER_FILE):
+        return pd.read_csv(USER_FILE)
+    else:
+        return pd.DataFrame(columns=["username", "password"])
+
+def save_users(df):
+    df.to_csv(USER_FILE, index=False)
+
+# ===============================
+# SESSION LOGIN
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
 
-def login():
+if "auth_mode" not in st.session_state:
+    st.session_state.auth_mode = "login"
+
+# ===============================
+# 🔐 LOGIN + REGISTER SYSTEM
+# ===============================
+def auth_page():
 
     st.markdown("""
     <style>
-    /* BACKGROUND */
     .stApp {
         background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     }
 
-    /* CARD LOGIN */
-    .login-card {
-        background: rgba(0, 0, 0, 0.7);
+    .auth-card {
+        background: rgba(0,0,0,0.75);
         padding: 30px;
         border-radius: 15px;
-        width: 350px;
+        width: 360px;
         margin: auto;
-        margin-top: 100px;
-        box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
+        margin-top: 80px;
+        box-shadow: 0 0 25px rgba(0,0,0,0.6);
     }
 
-    /* TITLE */
-    .login-title {
-        text-align: center;
-        color: white;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
+    .title {
+        text-align:center;
+        color:white;
+        font-size:22px;
+        font-weight:bold;
+        margin-bottom:15px;
     }
 
-    /* LABEL */
     label {
-        color: white !important;
-        font-size: 14px !important;
+        color:white !important;
+        font-size:14px !important;
     }
 
-    /* INPUT */
     .stTextInput input {
-        background-color: #f1f1f1;
-        border-radius: 8px;
+        border-radius:8px;
+        background:#f1f1f1;
     }
 
-    /* BUTTON */
     .stButton>button {
-        background-color: #ff4b4b;
-        color: white;
-        border-radius: 8px;
-        width: 100%;
+        background:#ff4b4b;
+        color:white;
+        border-radius:8px;
+        width:100%;
+    }
+
+    .switch-btn button {
+        background: transparent !important;
+        color: #81d4fa !important;
+        border: none;
+        text-decoration: underline;
     }
     </style>
     """, unsafe_allow_html=True)
 
+    users = load_users()
+
+    st.markdown('<div class="auth-card">', unsafe_allow_html=True)
+
     # ===============================
-    # CARD MULAI (INI YANG BENER)
+    # LOGIN
     # ===============================
-   
+    if st.session_state.auth_mode == "login":
 
-    st.markdown('<div class="login-title">🔐 Login Here</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">🔐 Login</div>', unsafe_allow_html=True)
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
-    if st.button("Login"):
-        if username == "admin" and password == "1234":
-            st.session_state.login = True
-            st.success("Login berhasil!")
+        if st.button("Login"):
+            user = users[(users["username"] == username) & (users["password"] == password)]
+
+            if not user.empty:
+                st.session_state.login = True
+                st.success("Login berhasil!")
+                st.rerun()
+            else:
+                st.error("Username atau password salah!")
+
+        st.markdown('<div class="switch-btn">', unsafe_allow_html=True)
+        if st.button("Belum punya akun? Register"):
+            st.session_state.auth_mode = "register"
             st.rerun()
-        else:
-            st.error("Username atau password salah!")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ===============================
+    # REGISTER
+    # ===============================
+    else:
+
+        st.markdown('<div class="title">📝 Register</div>', unsafe_allow_html=True)
+
+        new_user = st.text_input("Username Baru")
+        new_pass = st.text_input("Password Baru", type="password")
+
+        if st.button("Daftar"):
+            if new_user == "" or new_pass == "":
+                st.warning("Isi semua field!")
+            elif new_user in users["username"].values:
+                st.error("Username sudah digunakan!")
+            else:
+                new_data = pd.DataFrame([[new_user, new_pass]], columns=["username", "password"])
+                users = pd.concat([users, new_data], ignore_index=True)
+                save_users(users)
+
+                st.success("Registrasi berhasil! Silakan login.")
+                st.session_state.auth_mode = "login"
+                st.rerun()
+
+        st.markdown('<div class="switch-btn">', unsafe_allow_html=True)
+        if st.button("Sudah punya akun? Login"):
+            st.session_state.auth_mode = "login"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="small-text">Lost your password?</div>
-    <div class="small-text">Don't have an account?</div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
 
 # ===============================
 # CEK LOGIN
 # ===============================
 if not st.session_state.login:
-    login()
+    auth_page()
     st.stop()
 
 st.markdown("""
