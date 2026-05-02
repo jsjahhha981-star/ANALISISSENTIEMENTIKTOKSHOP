@@ -95,12 +95,12 @@ def auth_page():
 
     # 🔥 WRAPPER (FIX UI)
     st.markdown('<div class="auth-wrapper">', unsafe_allow_html=True)
-    st.markdown('<div class="auth-card">', unsafe_allow_html=True)
+    
 
     # LOGIN
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">🔐 LOGIN</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -138,7 +138,7 @@ def auth_page():
     # REGISTER
     else:
 
-        st.markdown('<div class="title">📝 REGISTER</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
