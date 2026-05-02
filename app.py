@@ -29,7 +29,7 @@ def save_users(df):
     df.to_csv(USER_FILE, index=False)
 
 # ===============================
-# SESSION LOGIN
+# SESSION
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
@@ -38,7 +38,7 @@ if "auth_mode" not in st.session_state:
     st.session_state.auth_mode = "login"
 
 # ===============================
-# 🔐 LOGIN + REGISTER SYSTEM
+# 🔐 LOGIN SYSTEM
 # ===============================
 def auth_page():
 
@@ -56,11 +56,11 @@ def auth_page():
     }
 
     .auth-card {
-        background: rgba(0,0,0,0.75);
+        background: rgba(0,0,0,0.85);
         padding: 30px;
         border-radius: 15px;
         width: 360px;
-        box-shadow: 0 0 25px rgba(0,0,0,0.6);
+        box-shadow: 0 0 30px rgba(0,0,0,0.7);
     }
 
     .title {
@@ -76,7 +76,7 @@ def auth_page():
     }
 
     .stTextInput input {
-        background:#ffffff;
+        background:white;
         color:black;
         border-radius:8px;
     }
@@ -93,11 +93,14 @@ def auth_page():
 
     users = load_users()
 
+    # 🔥 WRAPPER (FIX UI)
+    st.markdown('<div class="auth-wrapper">', unsafe_allow_html=True)
+    st.markdown('<div class="auth-card">', unsafe_allow_html=True)
 
     # LOGIN
     if st.session_state.auth_mode == "login":
 
-        st.markdown('<div class="title">FORM LOGIN</div>', unsafe_allow_html=True)
+        st.markdown('<div class="title">🔐 LOGIN</div>', unsafe_allow_html=True)
 
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
@@ -134,7 +137,8 @@ def auth_page():
 
     # REGISTER
     else:
-        st.markdown('<div class="title">FORM REGISTER</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="title">📝 REGISTER</div>', unsafe_allow_html=True)
 
         new_user = st.text_input("Username Baru")
         new_pass = st.text_input("Password Baru", type="password")
@@ -168,11 +172,20 @@ def auth_page():
     st.markdown('</div></div>', unsafe_allow_html=True)
 
 # ===============================
-# CEK LOGIN
+# ROUTING LOGIN
 # ===============================
 if not st.session_state.login:
     auth_page()
     st.stop()
+else:
+    # reset background setelah login
+    st.markdown("""
+    <style>
+    .stApp {
+        background: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -283,7 +296,13 @@ with st.sidebar:
         menu_icon="cast",
         default_index=0, 
     )
-
+# ===============================
+# LOGOUT
+# ===============================
+if selected == "Logout":
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.rerun()
 # ===============================
 # BERANDA
 # ===============================
@@ -814,14 +833,7 @@ elif selected == "Riwayat":
                 save_history(pd.DataFrame(columns=["Teks","Naive Bayes","SVM"]))
                 st.success("✅ Riwayat berhasil dihapus!")
 
-# ===============================
-# LOGOUT
-# ===============================
-if selected == "Logout":
-    st.session_state.login = False
-    st.session_state.auth_mode = "login"
-    st.success("Logout berhasil 👋")
-    st.rerun()
+
 
             # ===========================
 # FOOTER (UPGRADE)
