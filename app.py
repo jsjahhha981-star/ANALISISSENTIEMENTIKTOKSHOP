@@ -56,14 +56,14 @@ def auth_page():
     .stTextInput input {
         background: white;
         color: black;
-        border-radius: 8px;
+        border-radius: 20px;
     }
 
     .stButton>button {
         background: #4facfe;
         color: white;
-        border-radius: 20px;
-        width: 1000%;
+        border-radius: 8px;
+        width: 100%;
         font-weight: bold;
     }
     </style>
