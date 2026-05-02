@@ -96,7 +96,7 @@ with st.sidebar:
     st.markdown(
         """
         <div style="
-            background-color:#e0e0e0;
+            background-color:#2b2b2b;
             padding:10px;
             border-radius:10px;
             margin-bottom:10px;
