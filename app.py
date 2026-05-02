@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (SPLIT MODERN UI)
+# 🔐 LOGIN SYSTEM (DARK GALAXY UI)
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
@@ -15,12 +15,12 @@ def login():
     st.markdown("""
     <style>
 
-    /* BACKGROUND */
+    /* BACKGROUND NIGHT */
     .stApp {
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        background: radial-gradient(circle at top, #1a1a2e, #0f3460, #000000);
     }
 
-    /* CONTAINER */
+    /* CENTER CONTAINER */
     .login-container {
         display: flex;
         justify-content: center;
@@ -28,58 +28,54 @@ def login():
         height: 90vh;
     }
 
-    /* CARD */
-    .login-box {
-        display: flex;
-        width: 700px;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        background: white;
-    }
-
-    /* LEFT PANEL */
-    .login-left {
-        width: 40%;
-        background: linear-gradient(180deg, #7b1fa2, #512da8);
+    /* CARD GLASS */
+    .login-card {
+        width: 350px;
+        padding: 30px;
+        border-radius: 15px;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
+        text-align: center;
     }
 
-    .login-left h2 {
-        margin-top: 10px;
-    }
-
-    /* RIGHT PANEL */
-    .login-right {
-        width: 60%;
-        padding: 40px;
-    }
-
+    /* TITLE */
     .login-title {
         font-size: 22px;
         font-weight: bold;
         margin-bottom: 20px;
-        text-align: center;
+    }
+
+    /* INPUT */
+    .stTextInput > div > div > input {
+        background-color: rgba(255,255,255,0.1);
+        color: white;
+        border-radius: 8px;
     }
 
     /* BUTTON */
     div.stButton > button {
         width: 100%;
         border-radius: 8px;
-        background: linear-gradient(to right, #7b1fa2, #512da8);
+        background: linear-gradient(to right, #ff416c, #ff4b2b);
         color: white;
         font-weight: bold;
         border: none;
         height: 40px;
+        transition: 0.3s;
     }
 
     div.stButton > button:hover {
-        background: linear-gradient(to right, #6a1b9a, #4527a0);
+        transform: scale(1.03);
+        background: linear-gradient(to right, #ff4b2b, #ff416c);
+    }
+
+    /* TEXT */
+    .small-text {
+        font-size: 12px;
+        color: #ccc;
+        margin-top: 10px;
     }
 
     </style>
@@ -89,25 +85,18 @@ def login():
     # LAYOUT
     # ===============================
     st.markdown('<div class="login-container">', unsafe_allow_html=True)
-    st.markdown('<div class="login-box">', unsafe_allow_html=True)
 
-    # LEFT
+    st.markdown('<div class="login-card">', unsafe_allow_html=True)
+
     st.markdown("""
-        <div class="login-left">
-            <div style="font-size:50px;">👤</div>
-            <h2>LOGIN</h2>
-        </div>
+    <div style="font-size:50px;">👤</div>
+    <div class="login-title">Login Here</div>
     """, unsafe_allow_html=True)
 
-    # RIGHT
-    st.markdown('<div class="login-right">', unsafe_allow_html=True)
-
-    st.markdown('<div class="login-title">Sign in to your account</div>', unsafe_allow_html=True)
-
-    username = st.text_input("Email / Username")
+    username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
-    if st.button("LOGIN"):
+    if st.button("Login"):
         if username == "admin" and password == "1234":
             st.session_state.login = True
             st.success("Login berhasil!")
@@ -115,9 +104,13 @@ def login():
         else:
             st.error("Username atau password salah!")
 
-    st.markdown('</div>', unsafe_allow_html=True)  # right
-    st.markdown('</div>', unsafe_allow_html=True)  # box
-    st.markdown('</div>', unsafe_allow_html=True)  # container
+    st.markdown("""
+    <div class="small-text">Lost your password?</div>
+    <div class="small-text">Don't have an account?</div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ===============================
