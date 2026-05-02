@@ -5,23 +5,84 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 import os
 # ===============================
-# 🔐 LOGIN SYSTEM (TAMBAHAN)
+# 🔐 LOGIN SYSTEM (VERSI KEREN)
 # ===============================
 if "login" not in st.session_state:
     st.session_state.login = False
 
 def login():
-    st.markdown('<div class="card">', unsafe_allow_html=True)
 
+    # ===============================
+    # STYLE LOGIN (BLUE ICE)
+    # ===============================
     st.markdown("""
-    <h2 style='text-align:center; color:#2E86C1;'>🔐 LOGIN</h2>
-    <p style='text-align:center; color:gray;'>Masuk untuk menggunakan aplikasi</p>
+    <style>
+
+    /* BACKGROUND */
+    .stApp {
+        background: linear-gradient(135deg, #e0f7fa, #e3f2fd, #ffffff);
+    }
+
+    /* CARD LOGIN */
+    .login-card {
+        max-width: 400px;
+        margin: auto;
+        margin-top: 80px;
+        padding: 30px;
+        border-radius: 20px;
+        background: linear-gradient(145deg, #ffffff, #e3f2fd);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    /* TITLE */
+    .login-title {
+        font-size: 30px;
+        font-weight: bold;
+        color: #1e88e5;
+        margin-bottom: 10px;
+    }
+
+    /* SUBTITLE */
+    .login-sub {
+        color: gray;
+        margin-bottom: 25px;
+    }
+
+    /* BUTTON */
+    div.stButton > button {
+        width: 100%;
+        border-radius: 10px;
+        background: linear-gradient(to right, #4fc3f7, #1e88e5);
+        color: white;
+        font-weight: bold;
+        border: none;
+        height: 45px;
+        transition: 0.3s;
+    }
+
+    div.stButton > button:hover {
+        transform: scale(1.03);
+        background: linear-gradient(to right, #29b6f6, #1565c0);
+    }
+
+    </style>
     """, unsafe_allow_html=True)
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    # ===============================
+    # CARD LOGIN
+    # ===============================
+    st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
-    if st.button("Login"):
+    st.markdown("""
+    <div class="login-title">🔐 LOGIN</div>
+    <div class="login-sub">Masuk untuk menggunakan aplikasi</div>
+    """, unsafe_allow_html=True)
+
+    username = st.text_input("👤 Username")
+    password = st.text_input("🔑 Password", type="password")
+
+    if st.button("Masuk"):
         if username == "admin" and password == "1234":
             st.session_state.login = True
             st.success("Login berhasil!")
