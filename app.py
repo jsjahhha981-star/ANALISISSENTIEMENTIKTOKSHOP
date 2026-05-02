@@ -123,9 +123,49 @@ def auth_page():
             # st.write(users)
 
             if not user.empty:
-                st.session_state.login = True
-                st.success("Login berhasil!")
-                st.rerun()
+
+    # ===============================
+    # ANIMASI LOGIN BERHASIL
+    # ===============================
+    import time
+
+    success_placeholder = st.empty()
+
+    success_placeholder.markdown("""
+    <div style='
+        text-align:center;
+        padding:30px;
+        border-radius:15px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color:white;
+        font-size:20px;
+        font-weight:bold;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        animation: fadeIn 1s;
+    '>
+        🔐 Login Berhasil...<br>
+        ⏳ Mengarahkan ke dashboard...
+    </div>
+
+    <style>
+    @keyframes fadeIn {
+        from {opacity:0; transform:translateY(20px);}
+        to {opacity:1; transform:translateY(0);}
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # loading progress
+    progress = st.progress(0)
+    for i in range(100):
+        time.sleep(0.01)
+        progress.progress(i + 1)
+
+    # set login
+    st.session_state.login = True
+
+    time.sleep(0.5)
+    st.rerun()
             else:
                 st.error("Username atau password salah!")
 
