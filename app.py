@@ -11,6 +11,8 @@ if "login" not in st.session_state:
     st.session_state.login = False
 
 def login():
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+
     st.markdown("""
     <h2 style='text-align:center; color:#2E86C1;'>🔐 LOGIN</h2>
     <p style='text-align:center; color:gray;'>Masuk untuk menggunakan aplikasi</p>
@@ -20,13 +22,14 @@ def login():
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        # 🔑 Ganti sesuai keinginan
         if username == "admin" and password == "1234":
             st.session_state.login = True
             st.success("Login berhasil!")
             st.rerun()
         else:
             st.error("Username atau password salah!")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ===============================
 # CEK LOGIN
