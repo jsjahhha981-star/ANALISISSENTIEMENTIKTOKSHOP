@@ -755,6 +755,27 @@ Analisis sentimen data secara otomatis
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
 
+            st.markdown("---")
+            # ===============================
+# 🔥 MODEL PERFORMANCE DASHBOARD (PINDAH KE SINI)
+# ===============================
+st.markdown("""
+<div style='text-align:center'>
+    <h2>📊 Model Performance Dashboard</h2>
+    <p style='color:gray'>Perbandingan Naive Bayes vs SVM</p>
+</div>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Naive Bayes", f"{acc_nb:.3f}")
+col2.metric("SVM", f"{acc_svm:.3f}")
+
+if acc_nb > acc_svm:
+    col3.markdown("### **Naive Bayes Menang**")
+else:
+    col3.markdown("### **SVM Lebih Unggul**")
+
             else:
                 st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
 
