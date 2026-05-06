@@ -690,7 +690,7 @@ elif selected == "Upload Data":
                 f1_nb = report_nb['weighted avg']['f1-score']
                 f1_svm = report_svm['weighted avg']['f1-score']
 
-                st.markdown("###Model Terbaik")
+                st.markdown("### Model Terbaik")
 
                 col1, col2 = st.columns(2)
                 col1.metric("F1 NB", f"{f1_nb:.3f}")
