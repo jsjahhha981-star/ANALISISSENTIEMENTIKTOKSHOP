@@ -532,7 +532,7 @@ elif selected == "Input Text":
             st.info(f"📌 Teks dianalisis: \"{text[:100]}...\"")
 
 # ===============================
-# UPLOAD DATA (FIXED)
+# UPLOAD DATA (FINAL FIX + ANALISIS)
 # ===============================
 elif selected == "Upload Data":
 
@@ -654,14 +654,14 @@ elif selected == "Upload Data":
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.subheader("Naive Bayes")
+                    st.subheader("🔵 Naive Bayes")
                     cm_nb = confusion_matrix(y_test, y_pred_nb)
                     fig1, ax1 = plt.subplots()
                     sns.heatmap(cm_nb, annot=True, fmt='d', cmap='Blues', ax=ax1)
                     st.pyplot(fig1)
 
                 with col2:
-                    st.subheader("SVM")
+                    st.subheader("🟢 SVM")
                     cm_svm = confusion_matrix(y_test, y_pred_svm)
                     fig2, ax2 = plt.subplots()
                     sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Greens', ax=ax2)
@@ -685,19 +685,54 @@ elif selected == "Upload Data":
                     st.dataframe(pd.DataFrame(report_svm).transpose())
 
                 # ===============================
-                # 🔥 PERBANDINGAN F1 (FIX)
+                # 🔥 PERBANDINGAN F1
                 # ===============================
                 f1_nb = report_nb['weighted avg']['f1-score']
                 f1_svm = report_svm['weighted avg']['f1-score']
 
-                st.markdown("### 🏆 Kesimpulan Model Terbaik") 
-                col1, col2 = st.columns(2) 
-                col1.metric("F1 NB", f"{f1_nb:.3f}") 
-                col2.metric("F1 SVM", f"{f1_svm:.3f}") 
-                if f1_nb > f1_svm: st.success("🏆 Naive Bayes lebih unggul") 
-                    elif f1_nb < f1_svm: st.success("🏆 SVM lebih unggul") 
-                    else: st.info("⚖️ Keduanya setara") 
-                        else: st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
+                st.markdown("### 🏆 Kesimpulan Model Terbaik")
+
+                col1, col2 = st.columns(2)
+                col1.metric("F1 NB", f"{f1_nb:.3f}")
+                col2.metric("F1 SVM", f"{f1_svm:.3f}")
+
+                if f1_nb > f1_svm:
+                    st.success("🏆 Naive Bayes lebih unggul")
+                elif f1_nb < f1_svm:
+                    st.success("🏆 SVM lebih unggul")
+                else:
+                    st.info("⚖️ Keduanya setara")
+
+                # ===============================
+                # 📖 PENJELASAN OTOMATIS
+                # ===============================
+                st.markdown("### 📖 Analisis Hasil")
+
+                if f1_svm > f1_nb:
+                    st.info("""
+                    **Support Vector Machine (SVM) lebih unggul** karena mampu menangkap pola data yang kompleks 
+                    dan membentuk hyperplane optimal antar kelas.
+
+                    Cocok untuk data teks dengan distribusi fitur yang tidak linear.
+                    """)
+
+                elif f1_nb > f1_svm:
+                    st.info("""
+                    **Naive Bayes lebih unggul** karena dataset relatif sederhana dan sesuai dengan asumsi independensi fitur.
+
+                    Model ini cepat dan efektif untuk teks dengan pola yang tidak kompleks.
+                    """)
+
+                else:
+                    st.info("""
+                    Kedua model memiliki performa yang setara.
+                    Dataset dapat dipelajari dengan baik oleh kedua model.
+                    """)
+
+                st.caption("Evaluasi menggunakan weighted F1-score.")
+
+            else:
+                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
 
 
 # ===============================
