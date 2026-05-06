@@ -646,63 +646,30 @@ Analisis sentimen data secara otomatis
             st.subheader("Hasil Prediksi")
             st.dataframe(df.head(20), use_container_width=True)
 
-            # =========================================================
-            # 🔥 MODEL PERFORMANCE DASHBOARD (KEREN)
-            # =========================================================
-            st.markdown("""
-            <br>
-            <div style='text-align:center'>
-                <h2>📊 Model Performance Dashboard</h2>
-                <p style='color:gray'>Perbandingan Naive Bayes vs SVM</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-            from sklearn.model_selection import train_test_split
-            from sklearn.metrics import confusion_matrix, accuracy_score
-            import seaborn as sns
-
             if "Rating" in df.columns:
 
-                def label_sentiment(rating):
-                    if rating >= 4:
-                        return 'positif'
-                    elif rating >= 2:
-                        return 'netral'
-                    else:
-                        return 'negatif'
+    def label_sentiment(rating):
+        if rating >= 4:
+            return 'positif'
+        elif rating >= 2:
+            return 'netral'
+        else:
+            return 'negatif'
 
-                df["sentiment"] = df["Rating"].apply(label_sentiment)
+    df["sentiment"] = df["Rating"].apply(label_sentiment)
 
-                X_eval = df[text_col].astype(str)
-                y_eval = df["sentiment"]
+    X_eval = df[text_col].astype(str)
+    y_eval = df["sentiment"]
 
-                X_train, X_test, y_train, y_test = train_test_split(
-                    X_eval, y_eval, test_size=0.2, random_state=42, stratify=y_eval
-                )
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_eval, y_eval, test_size=0.2, random_state=42, stratify=y_eval
+    )
 
-                # ===============================
-                # PREDIKSI
-                # ===============================
-                y_pred_nb = nb_model.predict(X_test)
-                y_pred_svm = svm_model.predict(X_test)
+    y_pred_nb = nb_model.predict(X_test)
+    y_pred_svm = svm_model.predict(X_test)
 
-                acc_nb = accuracy_score(y_test, y_pred_nb)
-                acc_svm = accuracy_score(y_test, y_pred_svm)
-
-                # ===============================
-                # METRIC (KEREN)
-                # ===============================
-                col1, col2, col3 = st.columns(3)
-
-                col1.metric("Naive Bayes", f"{acc_nb:.3f}")
-                col2.metric("SVM", f"{acc_svm:.3f}")
-
-                if acc_nb > acc_svm:
-                    col3.markdown("### **Naive Bayes Menang**")
-                else:
-                    col3.markdown("### **SVM Lebih Unggul**")
-
-                st.markdown("---")
+    acc_nb = accuracy_score(y_test, y_pred_nb)
+    acc_svm = accuracy_score(y_test, y_pred_svm)
 
                 # ===============================
                 # CONFUSION MATRIX (KECIL & SEJAJAR)
