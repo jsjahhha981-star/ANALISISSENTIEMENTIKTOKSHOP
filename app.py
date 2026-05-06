@@ -671,85 +671,66 @@ Analisis sentimen data secara otomatis
     acc_nb = accuracy_score(y_test, y_pred_nb)
     acc_svm = accuracy_score(y_test, y_pred_svm)
 
-                # ===============================
-                # CONFUSION MATRIX (KECIL & SEJAJAR)
-                # ===============================
-                col1, col2 = st.columns(2)
+    # ===============================
+    # CONFUSION MATRIX
+    # ===============================
+    col1, col2 = st.columns(2)
 
-                with col1:
-                    st.markdown("##### 🔵 Naive Bayes")
+    with col1:
+        st.markdown("##### 🔵 Naive Bayes")
+        cm_nb = confusion_matrix(y_test, y_pred_nb)
+        fig1, ax1 = plt.subplots(figsize=(3.5, 3))
+        sns.heatmap(cm_nb, annot=True, fmt='d', cmap='Blues', ax=ax1)
+        st.pyplot(fig1)
 
-                    cm_nb = confusion_matrix(y_test, y_pred_nb)
+    with col2:
+        st.markdown("##### 🟢 Support Vector Machine")
+        cm_svm = confusion_matrix(y_test, y_pred_svm)
+        fig2, ax2 = plt.subplots(figsize=(3.5, 3))
+        sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Greens', ax=ax2)
+        st.pyplot(fig2)
 
-                    fig1, ax1 = plt.subplots(figsize=(3.5, 3))
-                    sns.heatmap(cm_nb, annot=True, fmt='d', cmap='Blues',
-                                annot_kws={"size": 9}, ax=ax1)
+    # ===============================
+    # CLASSIFICATION REPORT
+    # ===============================
+    st.markdown("## Classification Report")
 
-                    ax1.set_xlabel("Pred", fontsize=8)
-                    ax1.set_ylabel("Actual", fontsize=8)
-                    ax1.tick_params(labelsize=8)
+    col1, col2 = st.columns(2)
 
-                    st.pyplot(fig1, use_container_width=False)
+    with col1:
+        st.subheader("🔵 Naive Bayes")
+        report_nb = classification_report(y_test, y_pred_nb, output_dict=True)
+        st.dataframe(pd.DataFrame(report_nb).transpose())
 
-                with col2:
-                    st.markdown("##### 🟢 Support Vector Machine")
+    with col2:
+        st.subheader("🟢 SVM")
+        report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
+        st.dataframe(pd.DataFrame(report_svm).transpose())
 
-                    cm_svm = confusion_matrix(y_test, y_pred_svm)
+    # ===============================
+    # 🔥 MODEL PERFORMANCE (PINDAH KE BAWAH)
+    # ===============================
+    st.markdown("---")
 
-                    fig2, ax2 = plt.subplots(figsize=(3.5, 3))
-                    sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Greens',
-                                annot_kws={"size": 9}, ax=ax2)
+    st.markdown("""
+    <div style='text-align:center'>
+        <h2>📊 Model Performance Dashboard</h2>
+        <p style='color:gray'>Perbandingan Naive Bayes vs SVM</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-                    ax2.set_xlabel("Pred", fontsize=8)
-                    ax2.set_ylabel("Actual", fontsize=8)
-                    ax2.tick_params(labelsize=8)
+    col1, col2, col3 = st.columns(3)
 
-                    st.pyplot(fig2, use_container_width=False)
-                    # ===============================
-                # 🔥 CLASSIFICATION REPORT
-                # ===============================
-                st.markdown("## confusien evaluasi matriks")
+    col1.metric("Naive Bayes", f"{acc_nb:.3f}")
+    col2.metric("SVM", f"{acc_svm:.3f}")
 
-                col1, col2 = st.columns(2)
+    if acc_nb > acc_svm:
+        col3.markdown("### **Naive Bayes Menang**")
+    else:
+        col3.markdown("### **SVM Lebih Unggul**")
 
-                with col1:
-                    st.subheader("🔵 Naive Bayes")
-                    report_nb = classification_report(y_test, y_pred_nb, output_dict=True)
-                    st.dataframe(pd.DataFrame(report_nb).transpose())
-
-                with col2:
-                    st.subheader("🟢 Support Vector Machine")
-                    report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
-                    st.dataframe(pd.DataFrame(report_svm).transpose())
-                    st.markdown("---")
-
-# =========================================================
-# 🔥 MODEL PERFORMANCE DASHBOARD (PINDAH KE BAWAH)
-# =========================================================
-st.markdown("""
-<br>
-<div style='text-align:center'>
-    <h2>📊 Model Performance Dashboard</h2>
-    <p style='color:gray'>Perbandingan Naive Bayes vs SVM</p>
-</div>
-""", unsafe_allow_html=True)
-
-# Accuracy
-acc_nb = accuracy_score(y_test, y_pred_nb)
-acc_svm = accuracy_score(y_test, y_pred_svm)
-
-col1, col2, col3 = st.columns(3)
-
-col1.metric("Naive Bayes", f"{acc_nb:.3f}")
-col2.metric("SVM", f"{acc_svm:.3f}")
-
-if acc_nb > acc_svm:
-    col3.markdown("### **Naive Bayes Menang**")
 else:
-    col3.markdown("### **SVM Lebih Unggul**")
-
-            else:
-                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
+    st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
 
 
 # ===============================
