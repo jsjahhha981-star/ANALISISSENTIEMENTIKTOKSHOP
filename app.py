@@ -755,7 +755,7 @@ Analisis sentimen data secara otomatis
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
                     # ===============================
-# 🔥 PERBANDINGAN OTOMATIS (F1-SCORE)
+# 🔥 PERBANDINGAN OTOMATIS
 # ===============================
 
 f1_nb = report_nb['weighted avg']['f1-score']
