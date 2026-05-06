@@ -611,6 +611,7 @@ elif selected == "Upload Data":
             # ===============================
             # EVALUASI MODEL
             # ===============================
+            
             if "Rating" in df.columns:
 
                 from sklearn.model_selection import train_test_split
@@ -651,6 +652,7 @@ elif selected == "Upload Data":
                 # ===============================
                 # CONFUSION MATRIX
                 # ===============================
+                st.markdown("### CONFUSION MATRIX")
                 col1, col2 = st.columns(2)
 
                 with col1:
@@ -672,6 +674,7 @@ elif selected == "Upload Data":
                 # ===============================
                 # CLASSIFICATION REPORT
                 # ===============================
+                 st.markdown("### Confusion Evaluasi Matrix")
                 col1, col2 = st.columns(2)
 
                 with col1:
