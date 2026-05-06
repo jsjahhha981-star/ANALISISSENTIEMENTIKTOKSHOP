@@ -703,11 +703,6 @@ elif selected == "Upload Data":
                 else:
                     st.info("⚖️ Keduanya setara")
 
-                # ===============================
-                # 📖 PENJELASAN OTOMATIS
-                # ===============================
-                st.markdown("###")
-
                 if f1_svm > f1_nb:
                     st.info("""
                     **Support Vector Machine (SVM) lebih unggul** karena mampu menangkap pola data yang kompleks 
