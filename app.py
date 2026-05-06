@@ -738,11 +738,7 @@ Analisis sentimen data secara otomatis
                     ax2.tick_params(labelsize=8)
 
                     st.pyplot(fig2, use_container_width=False)
-
-            else:
-                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
-
-# ===============================
+                    # ===============================
                 # 🔥 CLASSIFICATION REPORT
                 # ===============================
                 st.markdown("## 📄 Classification Report")
@@ -758,6 +754,10 @@ Analisis sentimen data secara otomatis
                     st.subheader("SVM")
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
+
+            else:
+                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
+
 
 # ===============================
 # RIWAYAT
