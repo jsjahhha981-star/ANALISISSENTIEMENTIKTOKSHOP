@@ -692,19 +692,49 @@ elif selected == "Upload Data":
 
                 st.markdown("### 🏆 Kesimpulan Model Terbaik")
 
-                col1, col2 = st.columns(2)
-                col1.metric("F1 NB", f"{f1_nb:.3f}")
-                col2.metric("F1 SVM", f"{f1_svm:.3f}")
+col1, col2 = st.columns(2)
+col1.metric("F1 NB", f"{f1_nb:.3f}")
+col2.metric("F1 SVM", f"{f1_svm:.3f}")
 
-                if f1_nb > f1_svm:
-                    st.success("🏆 Naive Bayes lebih unggul")
-                elif f1_nb < f1_svm:
-                    st.success("🏆 SVM lebih unggul")
-                else:
-                    st.info("⚖️ Keduanya setara")
+# ===============================
+# 🏆 HASIL PERBANDINGAN
+# ===============================
+if f1_nb > f1_svm:
+    st.success("🏆 Naive Bayes lebih unggul")
 
-            else:
-                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
+    st.markdown("### 📖 Analisis Hasil")
+    st.info("""
+    Naive Bayes lebih unggul karena dataset cenderung sederhana dan distribusi kata 
+    relatif jelas, sehingga asumsi independensi antar fitur dapat bekerja dengan baik.
+
+    Model ini efektif untuk klasifikasi teks dengan pola yang tidak terlalu kompleks 
+    serta memiliki kecepatan komputasi yang tinggi.
+    """)
+
+elif f1_nb < f1_svm:
+    st.success("🏆 Support Vector Machine (SVM) lebih unggul")
+
+    st.markdown("### 📖 Analisis Hasil")
+    st.info("""
+    Support Vector Machine (SVM) lebih unggul karena mampu menangkap pola data yang lebih kompleks 
+    dan membentuk batas pemisah (hyperplane) yang optimal antar kelas.
+
+    Model ini sangat efektif pada data teks yang memiliki hubungan tidak linear 
+    dan distribusi fitur yang lebih beragam, sehingga menghasilkan performa F1-score yang lebih tinggi.
+    """)
+
+else:
+    st.info("⚖️ Keduanya memiliki performa yang setara")
+
+    st.markdown("### 📖 Analisis Hasil")
+    st.info("""
+    Kedua model menunjukkan performa yang seimbang.
+
+    Hal ini menandakan bahwa karakteristik dataset dapat dipelajari dengan baik 
+    oleh pendekatan probabilistik (Naive Bayes) maupun pendekatan berbasis margin (SVM).
+    """)
+
+st.caption("Penilaian menggunakan weighted F1-score untuk mempertimbangkan ketidakseimbangan jumlah data pada setiap kelas.")
 
 
 # ===============================
