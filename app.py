@@ -646,7 +646,13 @@ Analisis sentimen data secara otomatis
             st.subheader("Hasil Prediksi")
             st.dataframe(df.head(20), use_container_width=True)
 
-            if "Rating" in df.columns:
+            # ===============================
+# EVALUASI MODEL
+# ===============================
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+
+if "Rating" in df.columns:
 
     def label_sentiment(rating):
         if rating >= 4:
@@ -674,6 +680,8 @@ Analisis sentimen data secara otomatis
     # ===============================
     # CONFUSION MATRIX
     # ===============================
+    st.markdown("## 🔍 Confusion Matrix")
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -693,7 +701,7 @@ Analisis sentimen data secara otomatis
     # ===============================
     # CLASSIFICATION REPORT
     # ===============================
-    st.markdown("## Classification Report")
+    st.markdown("## 📄 Classification Report")
 
     col1, col2 = st.columns(2)
 
@@ -708,7 +716,7 @@ Analisis sentimen data secara otomatis
         st.dataframe(pd.DataFrame(report_svm).transpose())
 
     # ===============================
-    # 🔥 MODEL PERFORMANCE (PINDAH KE BAWAH)
+    # 🔥 MODEL PERFORMANCE (SUDAH DI BAWAH)
     # ===============================
     st.markdown("---")
 
