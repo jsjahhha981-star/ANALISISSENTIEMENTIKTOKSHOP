@@ -532,36 +532,27 @@ elif selected == "Input Text":
             st.info(f"📌 Teks dianalisis: \"{text[:100]}...\"")
 
 # ===============================
-# UPLOAD DATA (VERSI KEREN)
+# UPLOAD DATA (FIXED)
 # ===============================
 elif selected == "Upload Data":
-
 
     st.markdown("""
     <h2 style='text-align:center; color:#2E86C1; font-weight:bold;'>
      UPLOAD DATASET
-</h2>
-<p style='text-align:center; color:gray;'>
-Analisis sentimen data secara otomatis
-</p>
-<br>
+    </h2>
+    <p style='text-align:center; color:gray;'>
+    Analisis sentimen data secara otomatis
+    </p>
+    <br>
     """, unsafe_allow_html=True)
 
-    # ===============================
-    # CARD UPLOAD
-    # ===============================
     st.markdown('<div class="card">', unsafe_allow_html=True)
-
     file = st.file_uploader("Upload file CSV", type=["csv"])
-
     st.markdown('</div>', unsafe_allow_html=True)
 
     if file is not None:
         df = pd.read_csv(file)
 
-        # ===============================
-        # PREVIEW DATA
-        # ===============================
         st.subheader("Tabel Dataset")
         st.dataframe(df.head(), use_container_width=True)
 
@@ -571,19 +562,12 @@ Analisis sentimen data secara otomatis
 
             import time
 
-            # ===============================
-            # LOADING
-            # ===============================
             with st.spinner("⏳ Memproses dataset..."):
                 progress = st.progress(0)
-
                 for i in range(100):
                     time.sleep(0.01)
                     progress.progress(i + 1)
 
-                # ===============================
-                # PREDIKSI MODEL
-                # ===============================
                 df["NB"] = nb_model.predict(df[text_col].astype(str))
                 df["SVM"] = svm_model.predict(df[text_col].astype(str))
 
@@ -598,7 +582,6 @@ Analisis sentimen data secara otomatis
             neg = (df["NB"] == "negatif").sum()
 
             col1, col2, col3, col4 = st.columns(4)
-
             col1.metric("📊 Total Data", total)
             col2.metric("😊 Positif", pos)
             col3.metric("😐 Netral", net)
@@ -612,7 +595,6 @@ Analisis sentimen data secara otomatis
             col1, col2 = st.columns(2)
 
             with col1:
-                st.subheader("Distribusi Sentimen")
                 fig, ax = plt.subplots()
                 ax.pie([pos, net, neg],
                        labels=["Positif", "Netral", "Negatif"],
@@ -620,48 +602,19 @@ Analisis sentimen data secara otomatis
                 st.pyplot(fig)
 
             with col2:
-                st.subheader("Jumlah Sentimen")
                 fig, ax = plt.subplots()
                 ax.bar(["Positif", "Netral", "Negatif"], [pos, net, neg])
-                ax.set_ylabel("Jumlah")
                 st.pyplot(fig)
 
             st.markdown("---")
 
             # ===============================
-            # DOWNLOAD
+            # EVALUASI MODEL
             # ===============================
-            csv = df.to_csv(index=False).encode('utf-8')
-
-            st.download_button(
-                label="Download Hasil CSV",
-                data=csv,
-                file_name="hasil_sentimen.csv",
-                mime="text/csv"
-            )
-
-            # ===============================
-            # TABEL
-            # ===============================
-            st.subheader("Hasil Prediksi")
-            st.dataframe(df.head(20), use_container_width=True)
-
-            # =========================================================
-            # 🔥 MODEL PERFORMANCE DASHBOARD (KEREN)
-            # =========================================================
-            st.markdown("""
-            <br>
-            <div style='text-align:center'>
-                <h2>📊 Model Performance Dashboard</h2>
-                <p style='color:gray'>Perbandingan Naive Bayes vs SVM</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-            from sklearn.model_selection import train_test_split
-            from sklearn.metrics import confusion_matrix, accuracy_score
-            import seaborn as sns
-
             if "Rating" in df.columns:
+
+                from sklearn.model_selection import train_test_split
+                import seaborn as sns
 
                 def label_sentiment(rating):
                     if rating >= 4:
@@ -673,76 +626,52 @@ Analisis sentimen data secara otomatis
 
                 df["sentiment"] = df["Rating"].apply(label_sentiment)
 
-                X_eval = df[text_col].astype(str)
-                y_eval = df["sentiment"]
+                X = df[text_col].astype(str)
+                y = df["sentiment"]
 
                 X_train, X_test, y_train, y_test = train_test_split(
-                    X_eval, y_eval, test_size=0.2, random_state=42, stratify=y_eval
+                    X, y, test_size=0.2, random_state=42, stratify=y
                 )
 
-                # ===============================
-                # PREDIKSI
-                # ===============================
                 y_pred_nb = nb_model.predict(X_test)
                 y_pred_svm = svm_model.predict(X_test)
 
+                # ===============================
+                # ACCURACY
+                # ===============================
                 acc_nb = accuracy_score(y_test, y_pred_nb)
                 acc_svm = accuracy_score(y_test, y_pred_svm)
 
-                # ===============================
-                # METRIC (KEREN)
-                # ===============================
-                col1, col2, col3 = st.columns(3)
-
-                col1.metric("Naive Bayes", f"{acc_nb:.3f}")
-                col2.metric("SVM", f"{acc_svm:.3f}")
-
-                if acc_nb > acc_svm:
-                    col3.markdown("### **Naive Bayes Menang**")
-                else:
-                    col3.markdown("### **SVM Lebih Unggul**")
+                col1, col2 = st.columns(2)
+                col1.metric("Accuracy NB", f"{acc_nb:.3f}")
+                col2.metric("Accuracy SVM", f"{acc_svm:.3f}")
 
                 st.markdown("---")
 
                 # ===============================
-                # CONFUSION MATRIX (KECIL & SEJAJAR)
+                # CONFUSION MATRIX
                 # ===============================
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.markdown("##### 🔵 Naive Bayes")
-
+                    st.subheader("Naive Bayes")
                     cm_nb = confusion_matrix(y_test, y_pred_nb)
-
-                    fig1, ax1 = plt.subplots(figsize=(3.5, 3))
-                    sns.heatmap(cm_nb, annot=True, fmt='d', cmap='Blues',
-                                annot_kws={"size": 9}, ax=ax1)
-
-                    ax1.set_xlabel("Pred", fontsize=8)
-                    ax1.set_ylabel("Actual", fontsize=8)
-                    ax1.tick_params(labelsize=8)
-
-                    st.pyplot(fig1, use_container_width=False)
+                    fig1, ax1 = plt.subplots()
+                    sns.heatmap(cm_nb, annot=True, fmt='d', cmap='Blues', ax=ax1)
+                    st.pyplot(fig1)
 
                 with col2:
-                    st.markdown("##### 🟢 Support Vector Machine")
-
+                    st.subheader("SVM")
                     cm_svm = confusion_matrix(y_test, y_pred_svm)
+                    fig2, ax2 = plt.subplots()
+                    sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Greens', ax=ax2)
+                    st.pyplot(fig2)
 
-                    fig2, ax2 = plt.subplots(figsize=(3.5, 3))
-                    sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Greens',
-                                annot_kws={"size": 9}, ax=ax2)
+                st.markdown("---")
 
-                    ax2.set_xlabel("Pred", fontsize=8)
-                    ax2.set_ylabel("Actual", fontsize=8)
-                    ax2.tick_params(labelsize=8)
-
-                    st.pyplot(fig2, use_container_width=False)
-                    # ===============================
-                # 🔥 CLASSIFICATION REPORT
                 # ===============================
-                st.markdown("## confusien evaluasi matriks")
-
+                # CLASSIFICATION REPORT
+                # ===============================
                 col1, col2 = st.columns(2)
 
                 with col1:
@@ -751,32 +680,31 @@ Analisis sentimen data secara otomatis
                     st.dataframe(pd.DataFrame(report_nb).transpose())
 
                 with col2:
-                    st.subheader("🟢 Support Vector Machine")
+                    st.subheader("🟢 SVM")
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
-                    # ===============================
-if "Rating" in df.columns:
 
-    # ... semua proses evaluasi kamu ...
+                # ===============================
+                # 🔥 PERBANDINGAN F1 (FIX)
+                # ===============================
+                f1_nb = report_nb['weighted avg']['f1-score']
+                f1_svm = report_svm['weighted avg']['f1-score']
 
-    f1_nb = report_nb['weighted avg']['f1-score']
-    f1_svm = report_svm['weighted avg']['f1-score']
+                st.markdown("### 🏆 Kesimpulan Model Terbaik")
 
-    st.markdown("### 🏆 Kesimpulan Model Terbaik")
+                col1, col2 = st.columns(2)
+                col1.metric("F1 NB", f"{f1_nb:.3f}")
+                col2.metric("F1 SVM", f"{f1_svm:.3f}")
 
-    col1, col2 = st.columns(2)
-    col1.metric("F1-Score Naive Bayes", f"{f1_nb:.3f}")
-    col2.metric("F1-Score SVM", f"{f1_svm:.3f}")
+                if f1_nb > f1_svm:
+                    st.success("🏆 Naive Bayes lebih unggul")
+                elif f1_nb < f1_svm:
+                    st.success("🏆 SVM lebih unggul")
+                else:
+                    st.info("⚖️ Keduanya setara")
 
-    if f1_nb > f1_svm:
-        st.success("🏆 Naive Bayes lebih unggul berdasarkan F1-Score")
-    elif f1_nb < f1_svm:
-        st.success("🏆 Support Vector Machine lebih unggul berdasarkan F1-Score")
-    else:
-        st.info("⚖️ Kedua model memiliki performa yang sama")
-
-else:
-    st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
+            else:
+                st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
 
 
 # ===============================
