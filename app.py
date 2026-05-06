@@ -735,6 +735,7 @@ else:
     """)
 
 st.caption("Penilaian menggunakan weighted F1-score untuk mempertimbangkan ketidakseimbangan jumlah data pada setiap kelas.")
+else: st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
 
 
 # ===============================
