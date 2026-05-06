@@ -706,7 +706,7 @@ elif selected == "Upload Data":
                 # ===============================
                 # 📖 PENJELASAN OTOMATIS
                 # ===============================
-                st.markdown("### 📖 Analisis Hasil")
+                st.markdown("###")
 
                 if f1_svm > f1_nb:
                     st.info("""
