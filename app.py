@@ -754,6 +754,25 @@ Analisis sentimen data secara otomatis
                     st.subheader("🟢 Support Vector Machine")
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
+                    # ===============================
+# 🔥 PERBANDINGAN OTOMATIS (F1-SCORE)
+# ===============================
+
+f1_nb = report_nb['weighted avg']['f1-score']
+f1_svm = report_svm['weighted avg']['f1-score']
+
+st.markdown("### 🏆 Kesimpulan Model Terbaik")
+
+col1, col2 = st.columns(2)
+col1.metric("F1-Score Naive Bayes", f"{f1_nb:.3f}")
+col2.metric("F1-Score SVM", f"{f1_svm:.3f}")
+
+if f1_nb > f1_svm:
+    st.success("🏆 Naive Bayes lebih unggul berdasarkan F1-Score")
+elif f1_nb < f1_svm:
+    st.success("🏆 Support Vector Machine lebih unggul berdasarkan F1-Score")
+else:
+    st.info("⚖️ Kedua model memiliki performa yang sama")
 
             else:
                 st.warning("Dataset tidak memiliki kolom Rating, evaluasi model dilewati.")
