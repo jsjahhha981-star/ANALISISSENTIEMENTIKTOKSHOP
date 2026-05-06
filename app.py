@@ -741,17 +741,17 @@ Analisis sentimen data secara otomatis
                     # ===============================
                 # 🔥 CLASSIFICATION REPORT
                 # ===============================
-                st.markdown("## 📄 Classification Report")
+                st.markdown("## confusien evaluasi matriks")
 
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.subheader("Naive Bayes")
+                    st.subheader("🔵 Naive Bayes")
                     report_nb = classification_report(y_test, y_pred_nb, output_dict=True)
                     st.dataframe(pd.DataFrame(report_nb).transpose())
 
                 with col2:
-                    st.subheader("SVM")
+                    st.subheader("🟢 Support Vector Machine")
                     report_svm = classification_report(y_test, y_pred_svm, output_dict=True)
                     st.dataframe(pd.DataFrame(report_svm).transpose())
 
